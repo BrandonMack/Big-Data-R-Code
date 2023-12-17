@@ -274,7 +274,7 @@ for (i in 1:num_iterations) {
   test_data <- allwords[-index, ]
   
   # Calculate RMSE
-  #rmse_values[i] <- rmse(predictions, test_data$score)
+  rmse_values[i] <- rmse(predictions, test_data$score)
   
   # Print iteration number and RMSE
   cat("Iteration:", i, "RMSE:", rmse_values[i], "\n")
@@ -319,7 +319,7 @@ for (i in 1:num_iterations) {
   test_data <- allwords[-index, ]
   
   # Calculate RMSE
- # rmse_values[i] <- rmse(predictions, test_data$score)
+ rmse_values[i] <- rmse(predictions, test_data$score)
   
   # Print iteration number and RMSE
   cat("Iteration:", i, "RMSE:", rmse_values[i], "\n")
