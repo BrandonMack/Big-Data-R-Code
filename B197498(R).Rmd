@@ -127,7 +127,7 @@ climwords <- climwords %>%
 ## Bing analysis
 ```{r}
 ##bing analysis 
-# Perform sentiment analysis using the Bing lexicon
+# perform sentiment analysis using the Bing lexicon
 #covid
 covwords_sentiment <- covwords %>%
   inner_join(get_sentiments("bing"))
@@ -181,7 +181,7 @@ top_covid <- covwords_sentiment %>%
   slice_max(order_by = n, n = 10) %>%
   ungroup()
 
-# Plot the top 10 words by sentiment
+
 p1 <- ggplot(top_covid, aes(x = reorder(word, n), y = n, fill = sentiment)) +
   geom_col() +
   facet_wrap(~sentiment, scales = "free_y", ncol = 2) +
@@ -196,7 +196,7 @@ top_climate <- climwords_sentiment %>%
   slice_max(order_by = n, n = 10) %>%
   ungroup()
 
-# Plot the top 10 words by sentiment
+
 p2 <- ggplot(top_climate, aes(x = reorder(word, n), y = n, fill = sentiment)) +
   geom_col() +
   facet_wrap(~sentiment, scales = "free_y", ncol = 2) +
@@ -251,46 +251,44 @@ performance::check_model(mdl1)
 
 ## X validation
 ```{r X validation}
-
+### run as chunk DO NOT knit ####
 ## cross validation
 
-# Set the seed for reproducibility
+# set seeds
 set.seed(111)
 
 # Create train/test split (80/20)
 index <- createDataPartition(y = allwords$sentiment, p = 0.8, list = FALSE)
 
-# Initialize a counter for iterations
+# times of repitition 
 num_iterations <- 5  # Adjust as needed
 
 # create an object to store rmse values
 rmse_values <- numeric(num_iterations)
 
-# Create a loop for repeated cross-validation
+# build X validation
 for (i in 1:num_iterations) {
   
-  # Create train/test sets
+  # create train/test sets
   train_data <- allwords[index, ]
   test_data <- allwords[-index, ]
   
-  # Calculate RMSE
+  # calculate RMSE
   rmse_values[i] <- rmse(predictions, test_data$score)
   
-  # Print iteration number and RMSE
+  # print RMSE
   cat("Iteration:", i, "RMSE:", rmse_values[i], "\n")
   
   
-  # Replace 'your_model_formula' with your actual formula
-  # e.g., dependent_variable ~ predictor1 + predictor2 + ...
+ 
+  # state mdl
   mdl1 <- glm(score ~ sentiment * Dataset, data = train_data)
   
-  # Make predictions on the test set
+  # predict
   predictions <- predict(mdl1, newdata = test_data)
   
-  # Evaluate model performance (e.g., calculate RMSE or other relevant metrics)
-  # store the results or print them as needed
   
-  # Print iteration number
+  # print results
   cat("Iteration:", i, "\n")
   
   
@@ -300,13 +298,15 @@ for (i in 1:num_iterations) {
 ## X validation II
 ```{r X validation II}
 
+#### run as chunk DO NOT knit ####
+
 ## Do the same for the more parsimonious model
 
 # Create train/test split (80/20)
 index <- createDataPartition(y = allwords$sentiment, p = 0.8, list = FALSE)
 
-# Initialize a counter for iterations
-num_iterations <- 5  # Adjust as needed
+# put in counter
+num_iterations <- 5  
 
 # create an object to store rmse values
 rmse_values <- numeric(num_iterations)
@@ -321,21 +321,17 @@ for (i in 1:num_iterations) {
   # Calculate RMSE
  rmse_values[i] <- rmse(predictions, test_data$score)
   
-  # Print iteration number and RMSE
+  # print rmse
   cat("Iteration:", i, "RMSE:", rmse_values[i], "\n")
   
   
-  # Replace 'your_model_formula' with your actual formula
-  # e.g., dependent_variable ~ predictor1 + predictor2 + ...
+  # state mdl
   mdl2 <- glm(score ~ sentiment + Dataset, data = train_data)
   
-  # Make predictions on the test set
+  # preduict
   predictions <- predict(mdl2, newdata = test_data)
   
-  # Evaluate model performance (e.g., calculate RMSE or other relevant metrics)
-  # store the results or print them as needed
-  
-  # Print iteration number
+  # print results
   cat("Iteration:", i, "\n")
   
   
